@@ -4,16 +4,32 @@ import EditTodo from "./EditTodo";
 import Task from "./Task";
 import axios from "axios";
 import { useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 function TodoList() {
   let [todos, setTodos] = useState([]);
   let [task, setTask] = useState("");
   let [edit, setEdit] = useState(0);
+  const navigate = useNavigate();
 
 
+  let user=localStorage.getItem("user");
+  user=JSON.parse(user);
   useEffect(() => {
+    console.log(user.userId);
     const getTodos=async()=>{
-      const response = await axios.get("http://localhost:2000/api/");
-      setTodos(response.data);
+      // if user not present, navigate them to signin page
+      if (!user) {
+        navigate("/signin");
+      }
+      const config = {
+        headers: {
+          Authorization: `Bearer ${user?.token}`,
+        },
+      };
+      const response = await axios.get("http://localhost:2000/api/get/"+user?.userId,config);
+      setTodos([...todos, response.data]);
+      console.log(todos);
     }
     getTodos();
   }, []);
@@ -26,7 +42,12 @@ function TodoList() {
       created: new Date().toLocaleDateString(),
     };
     setTodos([...todos, todo]);
-    const response = await axios.post("http://localhost:2000/api/todo", todo);
+    const config = {
+      headers: {
+        Authorization: `Bearer ${user.token}`,
+      },
+    };
+    const response = await axios.post("http://localhost:2000/api/todo/"+user.userId, todo,config);
     console.log(response.data);
     setTask("");
   };

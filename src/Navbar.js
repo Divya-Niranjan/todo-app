@@ -5,7 +5,7 @@ function Navbar() {
   return (
     <div className="flex justify-between bg-[#1d3557] p-4 ">
       <button
-        onClick={() => navigate("/signup")}
+        onClick={() => navigate("/signin")}
         className="bg-[#fff] p-1 text-xl font-bold text-[#1d3557] rounded-lg"
       >
         Sign In
@@ -14,7 +14,7 @@ function Navbar() {
         Track your activities here
       </p>
       <button
-        onClick={() => navigate("/signin")}
+        onClick={() => navigate("/signup")}
         className="bg-[#fff] p-1 text-xl font-bold text-[#1d3557] rounded-lg"
       >
         Sign Up
